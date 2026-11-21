@@ -1,11 +1,72 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#11100e"><title>Der Dieb – Die Helden von Dornfels</title><link rel="stylesheet" href="../assets/site.css"></head>
-<body><header><div class="wrap topbar"><a class="brand" href="../"><span class="brand-mark">✧</span><span>Das Archiv von Dornfels</span></a><nav><a href="../#hauptauswahl">Heldenübersicht</a></nav></div></header>
-<main class="wrap"><section class="page-hero"><a class="back" href="../">← Zurück zur Heldenübersicht</a><div class="eyebrow">Die letzten Schreie von Dornfels</div><h1>Der Dieb</h1><div class="race-label">Vorgesehene Rasse: Hobbits</div>
-<div class="image-placeholder" role="img" aria-label="Platzhalter für eine fotorealistische Berufsszene"><div>Illustration folgt<span>Fotorealistische Szene, die diesen Beruf bei seiner Ausübung zeigt</span></div></div>
-</section>
-<section class="content-section"><h2>Herkunft und Familie</h2><p>Der freigegebene Hintergrundtext wird hier ergänzt. Dieser Platzhalter enthält bewusst noch keine erfundenen Angaben.</p></section>
-<section class="content-section"><h2>Vergangenheit</h2><p>Die freigegebene persönliche Geschichte wird hier ergänzt, sobald sie zur Veröffentlichung freigegeben wurde.</p></section>
-<section class="content-section"><h2>Was diesen Helden auszeichnet</h2><p>Eine kurze Beschreibung des Berufs und seiner Rolle folgt nach inhaltlicher Abstimmung.</p></section>
-<p class="notice">Diese Seite ist ein Gestaltungsgerüst. Sie enthält noch keine freigegebenen persönlichen Hintergrundtexte oder Illustrationen.</p>
-</main><footer><div class="wrap">Die letzten Schreie von Dornfels · Spielerbibliothek</div></footer></body></html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#11100e">
+<title>Der Dieb – Die Helden von Dornfels</title>
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header>
+  <div class="wrap topbar">
+    <a class="brand" href="../"><span class="brand-mark">✧</span><span>Das Archiv von Dornfels</span></a>
+    <nav><a href="../#hauptauswahl">Heldenübersicht</a></nav>
+  </div>
+</header>
+<main class="wrap">
+  <section class="page-hero">
+    <a class="back" href="../">← Zurück zur Heldenübersicht</a>
+    <div class="eyebrow">Die letzten Schreie von Dornfels</div>
+    <h1>Der Dieb</h1>
+    <div class="race-label">Vorgesehene Rasse: Hobbits</div>
+    <div class="image-placeholder" role="img" aria-label="Platzhalter für eine fotorealistische Berufsszene"><div>Illustration folgt<span>Fotorealistische Szene, die diesen Beruf bei seiner Ausübung zeigt</span></div></div>
+  </section>
+  <section class="content-section" id="background-story" hidden aria-live="polite">
+    <div id="background-story-content"></div>
+  </section>
+  <script>
+    (async () => {
+      const section = document.getElementById("background-story");
+      const target = document.getElementById("background-story-content");
+      try {
+        const response = await fetch("../content/dieb.md", { cache: "no-store" });
+        if (!response.ok) return;
+        const markdown = await response.text();
+        const lines = markdown.split(/\r?\n/);
+        let paragraph = [];
+        const flushParagraph = () => {
+          if (!paragraph.length) return;
+          const p = document.createElement("p");
+          p.textContent = paragraph.join(" ");
+          target.appendChild(p);
+          paragraph = [];
+        };
+        for (const line of lines) {
+          if (line.startsWith("## ")) {
+            flushParagraph();
+            const heading = document.createElement("h2");
+            heading.textContent = line.slice(3);
+            target.appendChild(heading);
+          } else if (line.startsWith("# ")) {
+            flushParagraph();
+            const heading = document.createElement("h2");
+            heading.textContent = line.slice(2);
+            target.appendChild(heading);
+          } else if (!line.trim()) {
+            flushParagraph();
+          } else {
+            paragraph.push(line.trim());
+          }
+        }
+        flushParagraph();
+        if (target.childElementCount) section.hidden = false;
+      } catch (error) {
+        console.error("Die Dieb-Hintergrundgeschichte konnte nicht geladen werden.", error);
+      }
+    })();
+  </script>
+</main>
+<footer><div class="wrap">Die letzten Schreie von Dornfels · Spielerbibliothek</div></footer>
+</body>
+</html>
