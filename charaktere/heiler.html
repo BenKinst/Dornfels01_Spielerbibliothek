@@ -36,7 +36,7 @@
         const response = await fetch("../content/heiler.md", { cache: "no-store" });
         if (!response.ok) return;
         const markdown = await response.text();
-        const lines = markdown.split(/\\r?\\n/);
+        const lines = markdown.split(/\r?\n/);
         let paragraph = [];
         const flushParagraph = () => {
           if (!paragraph.length) return;
