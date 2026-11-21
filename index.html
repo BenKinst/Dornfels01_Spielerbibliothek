@@ -26,7 +26,7 @@
 
   await Promise.all(cards.map(async card => {
     const page = card.getAttribute("href").split("/").pop();
-    const slug = page.replace(/\\.html$/, "");
+    const slug = page.slice(0, -5);
     const status = document.createElement("small");
     status.className = "story-status";
     status.textContent = "Hintergrundgeschichte folgt";
