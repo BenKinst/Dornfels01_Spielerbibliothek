@@ -25,6 +25,47 @@
     <p><strong>Rasse:</strong> Peredhil (Halbelf)</p>
     <p><strong>Beruf:</strong> Der Heiler ist ein Magier, der Verletzungen und Krankheiten behandelt, indem er deren Auswirkungen auf den eigenen Körper überträgt.</p>
   </section>
+  <section class="content-section" id="background-story" hidden aria-live="polite">
+    <div id="background-story-content"></div>
+  </section>
+  <script>
+    (async () => {
+      const section = document.getElementById("background-story");
+      const target = document.getElementById("background-story-content");
+      try {
+        const response = await fetch("../content/heiler.md", { cache: "no-store" });
+        if (!response.ok) return;
+        const markdown = await response.text();
+        const lines = markdown.split(/\\r?\\n/);
+        let paragraph = [];
+        const flushParagraph = () => {
+          if (!paragraph.length) return;
+          const p = document.createElement("p");
+          p.textContent = paragraph.join(" ");
+          target.appendChild(p);
+          paragraph = [];
+        };
+        for (const line of lines) {
+          if (line.startsWith("## ")) {
+            flushParagraph();
+            const heading = document.createElement("h2");
+            heading.textContent = line.slice(3);
+            target.appendChild(heading);
+          } else if (line.startsWith("# ")) {
+            flushParagraph();
+          } else if (!line.trim()) {
+            flushParagraph();
+          } else {
+            paragraph.push(line.trim());
+          }
+        }
+        flushParagraph();
+        if (target.childElementCount) section.hidden = false;
+      } catch (error) {
+        console.error("Die freigegebene Heiler-Hintergrundgeschichte konnte nicht geladen werden.", error);
+      }
+    })();
+  </script>
 </main>
 <footer><div class="wrap">Die letzten Schreie von Dornfels · Spielerbibliothek</div></footer>
 </body>
