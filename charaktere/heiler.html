@@ -53,6 +53,9 @@
             target.appendChild(heading);
           } else if (line.startsWith("# ")) {
             flushParagraph();
+            const heading = document.createElement("h2");
+            heading.textContent = line.slice(2);
+            target.appendChild(heading);
           } else if (!line.trim()) {
             flushParagraph();
           } else {
