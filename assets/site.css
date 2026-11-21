@@ -20,3 +20,13 @@
   font-size: 11px;
   font-style: italic;
 }
+
+/* Charakterbilder passen sich der verfügbaren Breite an, ohne verzerrt zu werden. */
+.character-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 24px 0;
+  border-radius: 10px;
+}
